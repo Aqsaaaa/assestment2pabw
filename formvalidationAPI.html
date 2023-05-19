@@ -13,7 +13,20 @@
   </style>
 </head>
 <body>
-  <h1>Public Holidays in 2020 - United States</h1>
+  <h1>Public Holidays</h1>
+
+  <h2>Add Holiday</h2>
+  <form id="addHolidayForm">
+    <label for="holidayDate">Date:</label>
+    <input type="date" id="holidayDate" required>
+    <br>
+    <label for="holidayName">Name:</label>
+    <input type="text" id="holidayName" required>
+    <br>
+    <button type="submit">Add</button>
+  </form>
+
+  <h2>Public Holidays in 2020 - United States</h2>
   <table>
     <thead>
       <tr>
@@ -26,6 +39,30 @@
   </table>
 
   <script>
+    function addHoliday(event) {
+      event.preventDefault();
+
+      const holidayDate = document.getElementById('holidayDate').value;
+      const holidayName = document.getElementById('holidayName').value;
+
+      const row = document.createElement('tr');
+      const dateCell = document.createElement('td');
+      dateCell.textContent = holidayDate;
+      const nameCell = document.createElement('td');
+      nameCell.textContent = holidayName;
+
+      row.appendChild(dateCell);
+      row.appendChild(nameCell);
+
+      const holidayData = document.getElementById('holidayData');
+      holidayData.appendChild(row);
+
+      document.getElementById('addHolidayForm').reset();
+    }
+
+    const form = document.getElementById('addHolidayForm');
+    form.addEventListener('submit', addHoliday);
+
     fetch('https://date.nager.at/api/v2/publicholidays/2020/US')
       .then(response => response.json())
       .then(data => {

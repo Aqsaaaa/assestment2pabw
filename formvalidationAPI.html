@@ -1,3 +1,7 @@
+<!-- Menampilkan data dari API tentang public holiday dan membuat form validation 
+    jika menambhakna tanggal yang sudah ada muncul notifikasi the holiday date is already added -->
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,15 +30,15 @@
     <button type="submit">Add</button>
   </form>
 
-  <h2>Public Holidays in 2020 - United States</h2>
-  <table>
+  <h2>Public Holidays</h2>
+  <table id="holidayTable">
     <thead>
       <tr>
         <th>Date</th>
         <th>Name</th>
       </tr>
     </thead>
-    <tbody id="holidayData">
+    <tbody id="holidayTableBody">
     </tbody>
   </table>
 
@@ -45,6 +49,15 @@
       const holidayDate = document.getElementById('holidayDate').value;
       const holidayName = document.getElementById('holidayName').value;
 
+      const rows = document.querySelectorAll('#holidayTableBody tr');
+      for (const row of rows) {
+        const dateCell = row.querySelector('td:first-child');
+        if (dateCell.textContent === holidayDate) {
+          alert('The holiday date is already added.');
+          return;
+        }
+      }
+
       const row = document.createElement('tr');
       const dateCell = document.createElement('td');
       dateCell.textContent = holidayDate;
@@ -54,8 +67,9 @@
       row.appendChild(dateCell);
       row.appendChild(nameCell);
 
-      const holidayData = document.getElementById('holidayData');
-      holidayData.appendChild(row);
+
+      const holidayTableBody = document.getElementById('holidayTableBody');
+      holidayTableBody.appendChild(row);
 
       document.getElementById('addHolidayForm').reset();
     }
@@ -66,7 +80,7 @@
     fetch('https://date.nager.at/api/v2/publicholidays/2020/US')
       .then(response => response.json())
       .then(data => {
-        const holidayData = document.getElementById('holidayData');
+        const holidayTableBody = document.getElementById('holidayTableBody');
         data.forEach(holiday => {
           const row = document.createElement('tr');
           const dateCell = document.createElement('td');
@@ -76,7 +90,7 @@
 
           row.appendChild(dateCell);
           row.appendChild(nameCell);
-          holidayData.appendChild(row);
+          holidayTableBody.appendChild(row);
         });
       })
       .catch(error => {

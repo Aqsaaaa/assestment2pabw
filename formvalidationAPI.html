@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Public Holidays</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Public Holidays in 2020 - United States</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody id="holidayData">
+    </tbody>
+  </table>
+
+  <script>
+    fetch('https://date.nager.at/api/v2/publicholidays/2020/US')
+      .then(response => response.json())
+      .then(data => {
+        const holidayData = document.getElementById('holidayData');
+        data.forEach(holiday => {
+          const row = document.createElement('tr');
+          const dateCell = document.createElement('td');
+          dateCell.textContent = holiday.date;
+          const nameCell = document.createElement('td');
+          nameCell.textContent = holiday.name;
+
+          row.appendChild(dateCell);
+          row.appendChild(nameCell);
+          holidayData.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  </script>
+</body>
+</html>
